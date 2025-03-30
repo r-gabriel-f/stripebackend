@@ -22,14 +22,24 @@ export class StripeService {
   } 
 
   async createPaymentIntent(amount: number, currency: string, productId: string, productName: string) {
-    return await this.stripe.paymentIntents.create({
-      amount,
-      currency,
-      payment_method_types: ['card'],
-      metadata: {
-        productId,
-        productName,
-      },
-    });
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount,
+        currency,
+        payment_method_types: ['card'],
+        metadata: {
+          productId,
+          productName,
+        },
+      });
+      return {
+        client_secret: paymentIntent.client_secret,
+        id: paymentIntent.id,
+        status: paymentIntent.status,
+      };
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+      throw error;
+    }
   }
 }
