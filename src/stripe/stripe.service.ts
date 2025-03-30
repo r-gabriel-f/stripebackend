@@ -19,5 +19,17 @@ export class StripeService {
   async getCustomers() {
     const customers = await this.stripe.customers.list({});
     return customers.data;
+  } 
+
+  async createPaymentIntent(amount: number, currency: string, productId: string, productName: string) {
+    return await this.stripe.paymentIntents.create({
+      amount,
+      currency,
+      payment_method_types: ['card'],
+      metadata: {
+        productId,
+        productName,
+      },
+    });
   }
 }

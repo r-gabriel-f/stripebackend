@@ -14,4 +14,17 @@ export class StripeController {
   async getCustomers() {
     return await this.stripeService.getCustomers();
   }
+
+  @Post('payment')
+  async createPayment(
+    @Body() body: { amount: number; currency: string; productId: string; productName: string }
+  ) {
+    return await this.stripeService.createPaymentIntent(
+      body.amount,
+      body.currency,
+      body.productId,
+      body.productName
+    );
+  }
+  
 }
