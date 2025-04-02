@@ -29,6 +29,18 @@ export class StripeController {
     }
   }
 
+  @Get('payments')
+  async getAllPayments() {
+    try {
+      return await this.stripeService.getAllPayments();
+    } catch (error) {
+      throw new HttpException(
+        `Error fetching payments: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   @Post('payment')
   async createPayment(
     @Body() body: { amount: number; currency: string; productId: string; productName: string }
